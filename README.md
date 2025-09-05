@@ -7,9 +7,9 @@ Implementation of [Multi-Modal Multi-Objective Contrastive Learning for Sentinel
 To run the script with the three configuration files, use the following commands:
 
 ```bash
-python main.py --config configs/DualSimCLR.yaml
-python main.py --config configs/IaI_SimCLR_noColorAugmentation.yaml
-python main.py --config configs/IaI_SimCLR.yaml
+python main.py --config-name configs/DualSimCLR.yaml
+python main.py --config-name configs/IaI_SimCLR_noColorAugmentation.yaml
+python main.py --config-name configs/IaI_SimCLR.yaml
 ```
 
 # Citation
