@@ -1,0 +1,102 @@
+defaults:
+  - lrscheduler: "Constant"
+
+gpu_idx: 0
+seed: 42
+nEpochs: 100
+
+outputpath: "/home/user/results/iaisimclr"
+experimentname: "debug"
+resume: False
+resumeCheckpoint: ""
+
+trainroutine:
+  _target_: "train.DualSimCLR"
+  _partial_: true
+
+loss:
+  _target_: "losses.NT_Xent_SingGPU"
+  temperature: 0.5
+  batch_size: 32
+
+model:
+  _target_: "model.IaISimCLR"
+  backbone_s1: "resnet18"
+  in_channel_s1: 2
+  backbone_s2: "resnet18"
+  in_channel_s2: 10
+  dim_latent_space: 128
+  normfeatures: True
+  intra_projection_active: False
+
+optimizer:
+  _target_: "torch.optim.Adam"
+  lr: 1e-4
+
+augmentations_inter:
+  _target_: "augmentations.TransformsPostivePair"
+  imgsize: 256
+  crop_active: True
+  crop_prob: 1
+  crop_scale: [0.3,0.9]
+  flip_active: False
+  flip_prob: .5
+  grey_active: False
+  grey_prob: .1
+  color_jitter_active: False
+  color_jitter_prob: .8
+  blur_active: False
+  blur_prob: .3
+
+augmentations_S1:
+  _target_: "augmentations.TransformsPostivePair"
+  imgsize: 256
+  crop_active: False
+  crop_prob: 1
+  crop_scale: [0.3,0.9]
+  flip_active: False
+  flip_prob: .5
+  grey_active: False
+  grey_prob: .1
+  color_jitter_active: False
+  color_jitter_prob: .8
+  blur_active: False
+  blur_prob: .3
+
+augmentations_S2:
+  _target_: "augmentations.TransformsPostivePair"
+  imgsize: 256
+  crop_active: False
+  crop_prob: 1
+  crop_scale: [0.3,0.9]
+  flip_active: False
+  flip_prob: .5
+  grey_active: False
+  grey_prob: .1
+  color_jitter_active: False
+  color_jitter_prob: .8
+  blur_active: False
+  blur_prob: .3
+
+dataloader: 
+  _target_: "dataloader.Sen12MS"
+  _partial_: true
+  topdir_dataset: "/home/user/data/sen12ms"
+  relative_locations: "./preliminary/sen12ms_locations.json"
+  resample_img: False
+  resample_img_size: 128
+  shuffle: True
+  batch_size: 32
+  threads: 16
+  drop_last_batch: False
+
+batchsampler:
+  _target_: "batchSampler.LocationSampler"
+  _partial_: true
+  percentageRandom: 0
+
+restrict_train_data: -1
+restrict_val_data: -1
+validation_every_N_sampels: -1
+validate_after_every_n_epoch: -1
+special_save_nEpoch: [5,10,20,30,40,50]
